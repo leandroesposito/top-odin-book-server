@@ -1,4 +1,4 @@
-const usersDB = require("../db/users");
+const userDB = require("../db/user");
 
 async function serializeUser(user, done) {
   done(null, user.id);
@@ -6,7 +6,7 @@ async function serializeUser(user, done) {
 
 async function deserializeUser(userId, done) {
   try {
-    const user = await usersDB.getUserById(userId);
+    const user = await userDB.getUserById(userId);
     if (!user) {
       return done(null, false);
     }

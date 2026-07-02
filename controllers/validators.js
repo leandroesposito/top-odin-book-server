@@ -1,7 +1,7 @@
 const { body, validationResult } = require("express-validator");
 const InvalidArgumentError = require("../errors/InvalidArgumentError");
 const NotAuthorizedError = require("../errors/NotAuthorizedError");
-const userDB = require("../db/users");
+const userDB = require("../db/user");
 
 function checkValidations() {
   return function (req, res, next) {

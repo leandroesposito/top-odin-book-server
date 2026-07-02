@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs");
 const validator = require("./validators");
-const userDB = require("../db/users");
+const userDB = require("../db/user");
 
 const signUp = [
   validator.validateUsername(),
