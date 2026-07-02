@@ -21,11 +21,11 @@ CREATE TABLE IF NOT EXISTS profiles (
   id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY ( INCREMENT 7 START 1000000 ),
   name TEXT,
   bio TEXT,
-  birthdate DATE DEFAULT '2000-01-01',
+  birthdate DATE,
   profession TEXT,
   profile_picture_url TEXT,
-  online_status boolean DEFAULT false,
-  user_id integer REFERENCES users(id) ON DELETE CASCADE
+  last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  user_id integer UNIQUE REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS friends (
