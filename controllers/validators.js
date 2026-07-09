@@ -1,7 +1,9 @@
-const { body, validationResult } = require("express-validator");
+const { body, validationResult, param } = require("express-validator");
 const InvalidArgumentError = require("../errors/InvalidArgumentError");
 const NotAuthorizedError = require("../errors/NotAuthorizedError");
+const NotFoundError = require("../errors/NotFoundError");
 const userDB = require("../db/user");
+const profileDB = require("../db/profile");
 
 function checkValidations() {
   return function (req, res, next) {
@@ -98,6 +100,48 @@ function validateConfirmPassword() {
   });
 }
 
+function userDoesntHaveProfile() {
+  return body().custom(async (_, { req }) => {
+    const profile = await profileDB.getProfileByUserId(req.user.id);
+
+    if (profile) {
+      throw new InvalidArgumentError(
+        "You already have a profile, use edit function to update it.",
+      );
+    }
+
+    return true;
+  });
+}
+
+function userHasProfile() {
+  return body().custom(async (_, { req }) => {
+    const profile = await profileDB.getProfileByUserId(req.user.id);
+
+    if (!profile) {
+      throw new InvalidArgumentError(
+        "You don't have a profile, use create function to create one.",
+      );
+    }
+
+    return true;
+  });
+}
+
+function profileExist() {
+  return param("userId").custom(async (userId, { req }) => {
+    const profile = await profileDB.getProfileByUserId(userId);
+
+    if (!profile) {
+      throw { error: new NotFoundError("Profile not found.") };
+    }
+
+    req.locals = { profile };
+
+    return true;
+  });
+}
+
 module.exports = {
   checkValidations,
   isAuthenticated,
@@ -106,4 +150,7 @@ module.exports = {
   validateUsername,
   validatePassword,
   validateConfirmPassword,
+  userDoesntHaveProfile,
+  userHasProfile,
+  profileExist,
 };
