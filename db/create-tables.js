@@ -29,10 +29,10 @@ CREATE TABLE IF NOT EXISTS profiles (
 );
 
 CREATE TABLE IF NOT EXISTS friends (
-  uid1 integer REFERENCES users(id) ON DELETE CASCADE,
-  uid2 integer REFERENCES users(id) ON DELETE CASCADE,
-  CONSTRAINT uid1_lessthan_uid2 CHECK (uid1 < uid2),
-  PRIMARY KEY ( uid1, uid2 )
+  user_id1 integer REFERENCES users(id) ON DELETE CASCADE,
+  user_id2 integer REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT user_id2 CHECK (user_id1 < user_id2),
+  PRIMARY KEY ( user_id1, user_id2 )
 );
 
 CREATE TABLE IF NOT EXISTS friends_requests (
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS friends_requests (
 CREATE TABLE IF NOT EXISTS posts (
   id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY ( INCREMENT 7 START 1000000 ),
   body TEXT,
-  uid integer references users(id) ON DELETE CASCADE,
+  user_id integer references users(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -55,9 +55,9 @@ CREATE TABLE IF NOT EXISTS posts_pictures (
 );
 
 CREATE TABLE IF NOT EXISTS likes (
-  uid integer REFERENCES users(id) ON DELETE CASCADE,
+  user_id integer REFERENCES users(id) ON DELETE CASCADE,
   post_id integer REFERENCES posts(id) ON DELETE CASCADE,
-  PRIMARY KEY (uid, post_id)
+  PRIMARY KEY (user_id, post_id)
 );
 
 CREATE TABLE IF NOT EXISTS comments (
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS comments (
   body TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   post_id integer REFERENCES posts(id) ON DELETE CASCADE,
-  uid integer REFERENCES users(id) ON DELETE CASCADE
+  user_id integer REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS messages (
@@ -83,10 +83,10 @@ CREATE TABLE IF NOT EXISTS messages_pictures (
 );
 
 CREATE TABLE IF NOT EXISTS messages_last_read (
-  uid1 integer REFERENCES users(id) ON DELETE CASCADE,
-  uid2 integer REFERENCES users(id) ON DELETE CASCADE,
+  user_id1 integer REFERENCES users(id) ON DELETE CASCADE,
+  user_id2 integer REFERENCES users(id) ON DELETE CASCADE,
   last_seen TIMESTAMP DEFAULT '2000-01-01',
-  PRIMARY KEY ( uid1, uid2 )
+  PRIMARY KEY ( user_id1, user_id2 )
 )
 `;
 
