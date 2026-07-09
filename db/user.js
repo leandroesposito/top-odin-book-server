@@ -10,7 +10,7 @@ async function createUser(username, password) {
 }
 
 async function getUserByUsername(username) {
-  const query = "SELECT (id, username) FROM users WHERE username = $1";
+  const query = "SELECT id, username, password FROM users WHERE username = $1";
   const params = [username];
 
   const rows = await runQuery(query, params);
@@ -18,7 +18,7 @@ async function getUserByUsername(username) {
 }
 
 async function getUserById(id) {
-  const query = "SELECT username FROM users WHERE id = $1";
+  const query = "SELECT id, username FROM users WHERE id = $1";
   const params = [id];
 
   const rows = await runQuery(query, params);
