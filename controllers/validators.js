@@ -41,11 +41,18 @@ function validateBodyString(field) {
     .withMessage(`'${field}' field is required`);
 }
 
-function validateUsername() {
-  return body("username")
+function validateBodyStringLength(field, min, max) {
+  return body(field)
     .isString()
-    .isLength({ min: 8, max: 20 })
-    .withMessage("'username' must be between 8 and 20 characters.")
+    .trim()
+    .isLength({ min, max })
+    .withMessage(
+      `'${field} must be between ${min} and ${max} characters inclusive.`,
+    );
+}
+
+function validateUsername() {
+  return validateBodyStringLength("username", 4, 20)
     .custom((username) => {
       const pattern = /(?=.*[^a-z0-9_.])/;
       if (pattern.test(username)) {
@@ -95,6 +102,7 @@ module.exports = {
   checkValidations,
   isAuthenticated,
   validateBodyString,
+  validateBodyStringLength,
   validateUsername,
   validatePassword,
   validateConfirmPassword,
