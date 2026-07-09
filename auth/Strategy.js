@@ -13,6 +13,9 @@ const Strategy = new LocalStrategy(async (username, password, done) => {
     if (!match) {
       return done(null, false, { message: "Incorrect username or password." });
     }
+
+    delete user.password;
+
     done(null, user);
   } catch (error) {
     done(error);
