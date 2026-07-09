@@ -4,6 +4,7 @@ const NotAuthorizedError = require("../errors/NotAuthorizedError");
 const NotFoundError = require("../errors/NotFoundError");
 const userDB = require("../db/user");
 const profileDB = require("../db/profile");
+const postDB = require("../db/post");
 
 function checkValidations() {
   return function (req, res, next) {
@@ -142,6 +143,38 @@ function profileExist() {
   });
 }
 
+function postExist() {
+  return param("postId").custom(async (postId, { req }) => {
+    const post = await postDB.getPostById(postId);
+
+    if (!post) {
+      throw { error: new NotFoundError("Post not found.") };
+    }
+
+    req.locals = { post };
+
+    return true;
+  });
+}
+
+function postBelongToUser() {
+  return param("postId").custom(async (postId, { req }) => {
+    const post = await postDB.getPostById(postId);
+
+    if (!post) {
+      throw { error: new NotFoundError("Post not found.") };
+    }
+
+    if (post.user_id !== req.user.id) {
+      throw { error: new NotAuthorizedError() };
+    }
+
+    req.locals = { post };
+
+    return true;
+  });
+}
+
 module.exports = {
   checkValidations,
   isAuthenticated,
@@ -153,4 +186,6 @@ module.exports = {
   userDoesntHaveProfile,
   userHasProfile,
   profileExist,
+  postExist,
+  postBelongToUser,
 };
