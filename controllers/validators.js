@@ -5,9 +5,20 @@ const userDB = require("../db/user");
 
 function checkValidations() {
   return function (req, res, next) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      req.locals = { errors: errors.array().map((e) => e.msg) };
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      const errors = [];
+
+      for (const err of result.errors) {
+        if (Object.hasOwn(err.msg, "error")) {
+          return next(err.msg.error);
+        }
+
+        errors.push(err.msg);
+      }
+
+      req.locals = { errors };
       return next(new InvalidArgumentError());
     }
     next();
