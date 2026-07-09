@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const authRouter = require("./auth");
-const profileRouter = require("./profiles");
+const profileRouter = require("./profile");
 const indexController = require("../controllers/index");
 
 const indexRouter = Router();
