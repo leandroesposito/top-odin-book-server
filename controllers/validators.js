@@ -5,6 +5,7 @@ const NotFoundError = require("../errors/NotFoundError");
 const userDB = require("../db/user");
 const profileDB = require("../db/profile");
 const postDB = require("../db/post");
+const likeDB = require("../db/like");
 
 function checkValidations() {
   return function (req, res, next) {
@@ -175,6 +176,30 @@ function postBelongToUser() {
   });
 }
 
+function userLikesPost() {
+  return param("postId").custom(async (postId, { req }) => {
+    const like = await likeDB.postIsLiked(req.user.id, req.locals.post.id);
+
+    if (!like) {
+      throw new InvalidArgumentError("You have not liked the post yet.");
+    }
+
+    return true;
+  });
+}
+
+function userHasntLikedPost() {
+  return param("postId").custom(async (postId, { req }) => {
+    const like = await likeDB.postIsLiked(req.user.id, req.locals.post.id);
+
+    if (like) {
+      throw new InvalidArgumentError("You already like this post.");
+    }
+
+    return true;
+  });
+}
+
 module.exports = {
   checkValidations,
   isAuthenticated,
@@ -188,4 +213,6 @@ module.exports = {
   profileExist,
   postExist,
   postBelongToUser,
+  userLikesPost,
+  userHasntLikedPost,
 };
