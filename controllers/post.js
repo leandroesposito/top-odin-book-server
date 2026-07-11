@@ -31,7 +31,7 @@ const getPostById = [
   },
 ];
 
-const getPosts = [
+const getAllPosts = [
   async function (req, res) {
     const userId = req.params.userId;
     const page = parseInt(req.query.page) || 1;
@@ -41,10 +41,23 @@ const getPosts = [
     let posts = [];
 
     if (userId) {
-      posts = await postDB.getPostsByUserId(userId);
+      posts = await postDB.getPostsByUserId(userId, limit, offset);
     } else {
       posts = await postDB.getAllPosts(limit, offset);
     }
+
+    res.json({ success: true, posts, page, limit });
+  },
+];
+
+const getFeedPosts = [
+  validator.isAuthenticated(),
+  async function (req, res) {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+
+    const posts = await postDB.getFeedPosts(req.user.id, limit, offset);
 
     res.json({ success: true, posts, page, limit });
   },
@@ -84,8 +97,9 @@ const deletePost = [
 
 module.exports = {
   createPost,
-  getPosts,
+  getAllPosts,
   getPostById,
+  getFeedPosts,
   updatePost,
   deletePost,
 };
