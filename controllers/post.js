@@ -25,7 +25,7 @@ const getPostById = [
   validator.postExist(),
   validator.checkValidations(),
   async function (req, res) {
-    const post = await postDB.getPostById(req.params.postId);
+    const post = await postDB.getPostById(req.params.postId, req.user?.id);
 
     res.json({ success: true, post });
   },
@@ -41,9 +41,14 @@ const getAllPosts = [
     let posts = [];
 
     if (userId) {
-      posts = await postDB.getPostsByUserId(userId, limit, offset);
+      posts = await postDB.getPostsByUserId(
+        userId,
+        limit,
+        offset,
+        req.user?.id,
+      );
     } else {
-      posts = await postDB.getAllPosts(limit, offset);
+      posts = await postDB.getAllPosts(limit, offset, req.user?.id);
     }
 
     res.json({ success: true, posts, page, limit });

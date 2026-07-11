@@ -1,21 +1,24 @@
 const { runQuery } = require("./runQuery");
 
-async function getAllPosts(limit, offset) {
+async function getAllPosts(limit, offset, currentUserId = null) {
   const query = `
     SELECT
       posts.*,
       COALESCE(profiles.name, users.username) as author,
       profiles.profile_picture_url,
-      l.likes_count,
+      CASE WHEN l.post_id IS NOT NULL THEN true ELSE false END as liked,
+      lc.likes_count,
       c.comments_count
     FROM posts
     JOIN users
       ON posts.user_id = users.id
     LEFT JOIN profiles
       ON users.id = profiles.user_id
+    LEFT JOIN likes l
+      ON l.post_id = posts.id AND l.user_id = $3
     LEFT JOIN LATERAL (
       SELECT COUNT(*)::INTEGER as likes_count FROM likes WHERE post_id = posts.id
-    ) as l ON true
+    ) as lc ON true
     LEFT JOIN LATERAL (
       SELECT COUNT(*)::INTEGER as comments_count FROM comments WHERE post_id = posts.id
     ) as c ON true
@@ -24,28 +27,31 @@ async function getAllPosts(limit, offset) {
     OFFSET $2;
   `;
 
-  const params = [limit, offset];
+  const params = [limit, offset, currentUserId];
 
   const res = await runQuery(query, params);
   return res;
 }
 
-async function getPostsByUserId(id, limit, offset) {
+async function getPostsByUserId(id, limit, offset, currentUserId = null) {
   const query = `
     SELECT
       posts.*,
       COALESCE(profiles.name, users.username) as author,
       profiles.profile_picture_url,
-      l.likes_count,
+      CASE WHEN l.post_id IS NOT NULL THEN true ELSE false END as liked,
+      lc.likes_count,
       c.comments_count
     FROM posts
     JOIN users
       ON posts.user_id = users.id
     LEFT JOIN profiles
       ON users.id = profiles.user_id
+    LEFT JOIN likes l
+      ON l.post_id = posts.id AND l.user_id = $4
     LEFT JOIN LATERAL (
       SELECT COUNT(*)::INTEGER as likes_count FROM likes WHERE post_id = posts.id
-    ) as l ON true
+    ) as lc ON true
     LEFT JOIN LATERAL (
       SELECT COUNT(*)::INTEGER as comments_count FROM comments WHERE post_id = posts.id
     ) as c ON true
@@ -54,28 +60,31 @@ async function getPostsByUserId(id, limit, offset) {
     LIMIT $2
     OFFSET $3;
   `;
-  const params = [id, limit, offset];
+  const params = [id, limit, offset, currentUserId];
 
   const res = await runQuery(query, params);
   return res;
 }
 
-async function getFeedPosts(user_id, limit, offset) {
+async function getFeedPosts(currentUserId, limit, offset) {
   const query = `
     SELECT
       posts.*,
       COALESCE(profiles.name, users.username) as author,
       profiles.profile_picture_url,
-      l.likes_count,
+      CASE WHEN l.post_id IS NOT NULL THEN true ELSE false END as liked,
+      lc.likes_count,
       c.comments_count
     FROM posts
     JOIN users
       ON posts.user_id = users.id
     LEFT JOIN profiles
       ON users.id = profiles.user_id
+    LEFT JOIN likes l
+      ON l.post_id = posts.id AND l.user_id = $1
     LEFT JOIN LATERAL (
       SELECT COUNT(*)::INTEGER as likes_count FROM likes WHERE post_id = posts.id
-    ) as l ON true
+    ) as lc ON true
     LEFT JOIN LATERAL (
       SELECT COUNT(*)::INTEGER as comments_count FROM comments WHERE post_id = posts.id
     ) as c ON true
@@ -88,34 +97,37 @@ async function getFeedPosts(user_id, limit, offset) {
     LIMIT $2
     OFFSET $3;
   `;
-  const params = [user_id, limit, offset];
+  const params = [currentUserId, limit, offset];
 
   const res = await runQuery(query, params);
   return res;
 }
 
-async function getPostById(id) {
+async function getPostById(id, currentUserId = null) {
   const query = `
     SELECT
       posts.*,
       COALESCE(profiles.name, users.username) as author,
       profiles.profile_picture_url,
-      l.likes_count,
+      CASE WHEN l.post_id IS NOT NULL THEN true ELSE false END as liked,
+      lc.likes_count,
       c.comments_count
     FROM posts
     JOIN users
       ON posts.user_id = users.id
     LEFT JOIN profiles
       ON users.id = profiles.user_id
+    LEFT JOIN likes l
+      ON l.post_id = posts.id AND l.user_id = $2
     LEFT JOIN LATERAL (
       SELECT COUNT(*)::INTEGER as likes_count FROM likes WHERE post_id = posts.id
-    ) as l ON true
+    ) as lc ON true
     LEFT JOIN LATERAL (
       SELECT COUNT(*)::INTEGER as comments_count FROM comments WHERE post_id = posts.id
     ) as c ON true
     WHERE posts.id = $1;
   `;
-  const params = [id];
+  const params = [id, currentUserId];
 
   const res = await runQuery(query, params);
   return res[0];
