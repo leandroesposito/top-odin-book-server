@@ -17,7 +17,7 @@ const createPost = [
       throw new Error("Error creating post.");
     }
 
-    res.json({ success: true, mesage: "Post create successfully." });
+    res.json({ success: true, message: "Post create successfully." });
   },
 ];
 
@@ -81,7 +81,7 @@ const updatePost = [
       throw new Error("Error updating post.");
     }
 
-    res.json({ success: true, mesage: "Post updated successfully." });
+    res.json({ success: true, message: "Post updated successfully." });
   },
 ];
 
@@ -96,7 +96,7 @@ const deletePost = [
       throw new Error("Error deleting post.");
     }
 
-    res.json({ success: true, mesage: "Post deleted successfully." });
+    res.json({ success: true, message: "Post deleted successfully." });
   },
 ];
 

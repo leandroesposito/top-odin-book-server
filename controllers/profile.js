@@ -30,7 +30,7 @@ const createProfile = [
       throw new Error("Error creating profile.");
     }
 
-    res.json({ success: true, mesage: "Profile create successfully." });
+    res.json({ success: true, message: "Profile create successfully." });
   },
 ];
 
@@ -46,7 +46,7 @@ const updateProfile = [
       throw new Error("Error updating profile.");
     }
 
-    res.json({ success: true, mesage: "Profile updated successfully." });
+    res.json({ success: true, message: "Profile updated successfully." });
   },
 ];
 
