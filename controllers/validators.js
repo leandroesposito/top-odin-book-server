@@ -6,6 +6,7 @@ const userDB = require("../db/user");
 const profileDB = require("../db/profile");
 const postDB = require("../db/post");
 const likeDB = require("../db/like");
+const commentDB = require("../db/comment");
 
 function checkValidations() {
   return function (req, res, next) {
@@ -200,6 +201,24 @@ function userHasntLikedPost() {
   });
 }
 
+function commentBelongToUser() {
+  return param("commentId").custom(async (commentId, { req }) => {
+    const comment = await commentDB.getCommentById(commentId);
+
+    if (!comment) {
+      throw { error: new NotFoundError("Comment not found.") };
+    }
+
+    if (comment.user_id !== req.user.id) {
+      throw { error: new NotAuthorizedError() };
+    }
+
+    req.locals = { comment };
+
+    return true;
+  });
+}
+
 module.exports = {
   checkValidations,
   isAuthenticated,
@@ -215,4 +234,5 @@ module.exports = {
   postBelongToUser,
   userLikesPost,
   userHasntLikedPost,
+  commentBelongToUser,
 };
