@@ -7,6 +7,8 @@ const profileDB = require("../db/profile");
 const postDB = require("../db/post");
 const likeDB = require("../db/like");
 const commentDB = require("../db/comment");
+const friendRequestDB = require("../db/friend-request");
+const friendDB = require("../db/friend");
 
 function checkValidations() {
   return function (req, res, next) {
@@ -219,6 +221,69 @@ function commentBelongToUser() {
   });
 }
 
+function userExist() {
+  return param("userId").custom(async (userId) => {
+    const user = await userDB.getUserById(userId);
+
+    if (!user) {
+      throw { error: new NotFoundError("User not found.") };
+    }
+
+    return true;
+  });
+}
+
+function friendRequestReceived() {
+  return param("userId").custom(async (userId, { req }) => {
+    const request = await friendRequestDB.getFriendRequest(userId, req.user.id);
+
+    if (!request) {
+      throw { error: new NotFoundError("Friend request doesn't exist.") };
+    }
+
+    return true;
+  });
+}
+
+function friendRequestIsValid() {
+  return param("userId").custom(async (userId, { req }) => {
+    const sent = await friendRequestDB.getFriendRequest(req.user.id, userId);
+
+    if (sent) {
+      throw {
+        error: new InvalidArgumentError(
+          "You have already sent a request to this user.",
+        ),
+      };
+    }
+
+    const received = await friendRequestDB.getFriendRequest(
+      userId,
+      req.user.id,
+    );
+
+    if (received) {
+      throw {
+        error: new InvalidArgumentError(
+          "You already have a pending request from this user.",
+        ),
+      };
+    }
+
+    const isFriend = await friendDB.getFriendsPair(userId, req.user.id);
+
+    if (isFriend) {
+      throw {
+        error: new InvalidArgumentError(
+          "You are already a friend if this user.",
+        ),
+      };
+    }
+
+    return true;
+  });
+}
+
 module.exports = {
   checkValidations,
   isAuthenticated,
@@ -235,4 +300,7 @@ module.exports = {
   userLikesPost,
   userHasntLikedPost,
   commentBelongToUser,
+  userExist,
+  friendRequestReceived,
+  friendRequestIsValid,
 };
