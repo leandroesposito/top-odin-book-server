@@ -1,5 +1,5 @@
 class NotAuthorizedError extends Error {
-  constructor(message) {
+  constructor(message = "Not authorized.") {
     super(message);
     this.status = 401;
     this.name = "NotAuthorizedError";
