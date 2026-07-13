@@ -51,7 +51,7 @@ function validateBodyStringLength(field, min, max) {
     .trim()
     .isLength({ min, max })
     .withMessage(
-      `'${field} must be between ${min} and ${max} characters inclusive.`,
+      `'${field}' must be between ${min} and ${max} characters inclusive.`,
     );
 }
 
