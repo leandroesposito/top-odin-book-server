@@ -1,7 +1,15 @@
 const { runQuery } = require("./runQuery");
 
 async function getProfileByUserId(id) {
-  const query = "SELECT * FROM profiles WHERE user_id = $1";
+  const query = `
+    SELECT p.*, COUNT(f.user_id1) as friends_count
+    FROM profiles p
+    JOIN friends f
+      ON (f.user_id1 =  p.user_id
+        OR (f.user_id2 =  p.user_id))
+    WHERE p.user_id = $1
+    GROUP BY p.id
+  `;
   const params = [id];
 
   const res = await runQuery(query, params);
