@@ -284,6 +284,20 @@ function friendRequestIsValid() {
   });
 }
 
+function isFriend() {
+  return param("userId").custom(async (userId, { req }) => {
+    const result = await friendDB.getFriendsPair(req.user.id, userId);
+
+    if (!result) {
+      throw {
+        error: new InvalidArgumentError("You are not a friend of this user."),
+      };
+    }
+
+    return true;
+  });
+}
+
 module.exports = {
   checkValidations,
   isAuthenticated,
@@ -303,4 +317,5 @@ module.exports = {
   userExist,
   friendRequestReceived,
   friendRequestIsValid,
+  isFriend,
 };

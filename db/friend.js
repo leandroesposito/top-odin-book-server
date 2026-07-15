@@ -37,6 +37,26 @@ async function getFriendsPair(user_id1, user_id2) {
   return res[0];
 }
 
+async function getFriendsList(userId) {
+  const query = `
+    SELECT
+      u.id,
+      COALESCE(p.name, u.username) as name,
+      p.profile_picture_url
+    FROM users u
+    LEFT JOIN profiles p
+      ON u.id = p.user_id
+    JOIN friends
+      ON (user_id1 = u.id AND user_id2 = $1) OR
+        (user_id1 = $1 AND user_id2 = u.id)
+    ;
+  `;
+  const params = [userId];
+
+  const res = await runQuery(query, params);
+  return res;
+}
+
 async function deleteFriendsPair(user_id1, user_id2) {
   const [lower, higher] = sortParams(user_id1, user_id2);
 
@@ -56,5 +76,6 @@ async function deleteFriendsPair(user_id1, user_id2) {
 module.exports = {
   addFriendsPair,
   getFriendsPair,
+  getFriendsList,
   deleteFriendsPair,
 };
