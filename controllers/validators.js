@@ -290,7 +290,9 @@ function isFriend() {
 
     if (!result) {
       throw {
-        error: new InvalidArgumentError("You are not a friend of this user."),
+        error: new InvalidArgumentError(
+          "You don't have a friend with this id.",
+        ),
       };
     }
 
