@@ -14,7 +14,8 @@ DROP TABLE IF EXISTS users;
 CREATE TABLE IF NOT EXISTS users (
   id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY ( INCREMENT 7 START 1000000 ),
   username TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS profiles (
@@ -24,7 +25,6 @@ CREATE TABLE IF NOT EXISTS profiles (
   birthdate DATE,
   profession TEXT,
   profile_picture_url TEXT,
-  last_active TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   user_id integer UNIQUE REFERENCES users(id) ON DELETE CASCADE
 );
 
