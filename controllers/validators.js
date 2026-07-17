@@ -9,6 +9,7 @@ const likeDB = require("../db/like");
 const commentDB = require("../db/comment");
 const friendRequestDB = require("../db/friend-request");
 const friendDB = require("../db/friend");
+const messageDB = require("../db/message");
 
 function checkValidations() {
   return function (req, res, next) {
@@ -300,6 +301,26 @@ function isFriend() {
   });
 }
 
+function isMessageOwner() {
+  return param("messageId").custom(async (messageId, { req }) => {
+    const message = await messageDB.getMessageSenderId(messageId);
+
+    if (!message) {
+      throw {
+        error: new NotFoundError("Message not found."),
+      };
+    }
+
+    if (message.sender_id !== req.user.id) {
+      throw {
+        error: new NotAuthorizedError(),
+      };
+    }
+
+    return true;
+  });
+}
+
 module.exports = {
   checkValidations,
   isAuthenticated,
@@ -320,4 +341,5 @@ module.exports = {
   friendRequestReceived,
   friendRequestIsValid,
   isFriend,
+  isMessageOwner,
 };
