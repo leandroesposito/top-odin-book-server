@@ -7,8 +7,12 @@ const logOut = [
       if (error) {
         return next(error);
       }
+
+      req.session.destroy(() => {
+        res.clearCookie("connect.sid");
+        res.json({ success: true });
+      });
     });
-    res.json({ success: true });
   },
 ];
 
