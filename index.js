@@ -46,7 +46,17 @@ app.use("/api", indexRouter);
 app.use((error, req, res, next) => {
   console.error(new Date().toLocaleString(), error);
   const status = Object.hasOwn(error, "status") ? error.status : 500;
-  const errors = req.locals?.errors || [error.message] || [error.name];
+  let errors = null;
+
+  if (req.locals && req.locals.errors) {
+    errors = req.locals.errors;
+  } else if (error.message) {
+    errors = [error.message];
+  } else if (error.errors) {
+    errors = error.errors.map((err) => err.message);
+  } else {
+    errors = [error.name];
+  }
 
   res.status(status).json({ success: false, errors });
 });
