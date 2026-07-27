@@ -12,6 +12,7 @@ const serializations = require("./auth/serializations");
 const InvalidArgumentError = require("./errors/InvalidArgumentError");
 
 const indexRouter = require("./routes/index");
+const NotFoundError = require("./errors/NotFoundError");
 
 const PORT = process.env.PORT || 3000;
 
@@ -42,6 +43,10 @@ passport.serializeUser(serializations.serializeUser);
 passport.deserializeUser(serializations.deserializeUser);
 
 app.use("/api", indexRouter);
+
+app.use((req, res, next) => {
+  throw new NotFoundError("Route not found");
+});
 
 app.use((error, req, res, next) => {
   console.error(new Date().toLocaleString(), error);
