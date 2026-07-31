@@ -10,7 +10,13 @@ async function createUser(username, password) {
 }
 
 async function getUserByUsername(username) {
-  const query = "SELECT id, username, password FROM users WHERE username = $1";
+  const query = `
+    SELECT u.id, u.username, u.password, COALESCE(p.name, u.username) as name
+    FROM users u
+    LEFT JOIN profiles p
+      ON u.id = p.user_id
+    WHERE u.username = $1
+  `;
   const params = [username];
 
   const rows = await runQuery(query, params);
