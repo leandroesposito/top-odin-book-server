@@ -29,7 +29,11 @@ const logIn = [
   },
   function (req, res) {
     if (req.user) {
-      res.json({ success: true, user: req.user });
+      res.json({
+        success: true,
+        user: req.user,
+        message: `Welcome back ${req.user.name}.`,
+      });
     }
   },
 ];
