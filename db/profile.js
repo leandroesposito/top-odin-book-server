@@ -17,7 +17,7 @@ async function getProfileByUserId(id) {
 }
 
 async function createProfile(
-  { name, bio, birthdate, profession, profile_picrute_url },
+  { name, bio, birthdate, profession, profile_picture_url },
   user_id,
 ) {
   const query = `
@@ -31,7 +31,7 @@ async function createProfile(
     bio,
     birthdate,
     profession,
-    profile_picrute_url,
+    profile_picture_url,
     user_id,
   ];
 
@@ -40,7 +40,7 @@ async function createProfile(
 }
 
 async function updateProfile(
-  { name, bio, birthdate, profession, profile_picrute_url },
+  { name, bio, birthdate, profession, profile_picture_url },
   user_id,
 ) {
   const query = `
@@ -57,7 +57,7 @@ async function updateProfile(
     bio,
     birthdate,
     profession,
-    profile_picrute_url,
+    profile_picture_url,
     user_id,
   ];
 
