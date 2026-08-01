@@ -4,7 +4,7 @@ async function getProfileByUserId(id) {
   const query = `
     SELECT p.*, COUNT(f.user_id1) as friends_count
     FROM profiles p
-    JOIN friends f
+    LEFT JOIN friends f
       ON (f.user_id1 =  p.user_id
         OR (f.user_id2 =  p.user_id))
     WHERE p.user_id = $1
