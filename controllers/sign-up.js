@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const validator = require("./validators");
 const userDB = require("../db/user");
+const profileDB = require("../db/profile");
 
 const signUp = [
   validator.validateUsername(),
@@ -13,6 +14,7 @@ const signUp = [
     const securePassword = bcrypt.hashSync(password, 10);
 
     const newUserId = await userDB.createUser(username, securePassword);
+    const newProfileId = await profileDB.createProfile({}, newUserId.id);
 
     if (newUserId) {
       res.json({ success: true, message: "User created successfully." });
