@@ -54,7 +54,18 @@ const getProfileByUserId = [
   validator.profileExist(),
   validator.checkValidations(),
   function (req, res) {
-    res.json({ profile: req.locals.profile });
+    res.json({
+      profile: {
+        id: req.locals.profile.id,
+        name: req.locals.profile.name,
+        bio: req.locals.profile.bio,
+        birthdate: req.locals.profile.birthdate,
+        profession: req.locals.profile.profession,
+        profilePictureUrl: req.locals.profile.profile_picture_url,
+        userId: req.locals.profile.user_id,
+        friendsCount: req.locals.profile.friends_count,
+      },
+    });
   },
 ];
 
