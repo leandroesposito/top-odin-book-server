@@ -17,7 +17,7 @@ async function getProfileByUserId(id) {
 }
 
 async function createProfile(
-  { name, bio, birthdate, profession, profile_picture_url },
+  { name, bio, birthdate, profession, profilePictureUrl },
   user_id,
 ) {
   const query = `
@@ -26,24 +26,17 @@ async function createProfile(
     ) VALUES (
       $1 ,$2 ,$3 ,$4 ,$5 ,$6
     ) RETURNING id;`;
-  const params = [
-    name,
-    bio,
-    birthdate,
-    profession,
-    profile_picture_url,
-    user_id,
-  ];
+  const params = [name, bio, birthdate, profession, profilePictureUrl, user_id];
 
   const res = await runQuery(query, params);
   return res[0];
 }
 
 async function updateProfile(
-  { name, bio, birthdate, profession, profile_picture_url },
+  { name, bio, birthdate, profession, profilePictureUrl },
   user_id,
 ) {
-  const query = `
+  let query = `
     UPDATE profiles SET
       name = $1,
       bio = $2,
@@ -52,14 +45,19 @@ async function updateProfile(
       profile_picture_url = $5
     WHERE user_id = $6
     RETURNING id;`;
-  const params = [
-    name,
-    bio,
-    birthdate,
-    profession,
-    profile_picture_url,
-    user_id,
-  ];
+  let params = [name, bio, birthdate, profession, profilePictureUrl, user_id];
+
+  if (!profilePictureUrl) {
+    query = `
+      UPDATE profiles SET
+        name = $1,
+        bio = $2,
+        birthdate = $3,
+        profession = $4
+      WHERE user_id = $5
+      RETURNING id;`;
+    params = [name, bio, birthdate, profession, user_id];
+  }
 
   const res = await runQuery(query, params);
   return res[0];

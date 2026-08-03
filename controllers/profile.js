@@ -1,6 +1,22 @@
+require("dotenv").config();
 const { body } = require("express-validator");
 const profileDB = require("../db/profile");
 const validator = require("./validators");
+const cloudinary = require("cloudinary").v2;
+
+const multer = require("multer");
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 1024 * 512,
+    files: 1,
+  },
+  fileFilter: function (req, file, cb) {
+    cb(null, true);
+  },
+}).single("profile-picture");
+
+cloudinary.config();
 
 const validateProfileFields = [
   validator
@@ -39,8 +55,34 @@ const updateProfile = [
   validator.userHasProfile(),
   validateProfileFields,
   validator.checkValidations(),
+  upload,
   async function (req, res) {
-    const id = await profileDB.updateProfile(req.body, req.user.id);
+    const body = { ...req.body };
+
+    if (req.file) {
+      const filePublicId = `profile_picture_${req.user.id}`;
+      const uploadResult = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            {
+              public_id: filePublicId,
+              overwrite: true,
+              format: "jpg",
+            },
+            (error, uploadResult) => {
+              if (error) {
+                return reject(error);
+              }
+              return resolve(uploadResult);
+            },
+          )
+          .end(req.file.buffer);
+      });
+
+      body.profilePictureUrl = uploadResult.url;
+    }
+
+    const id = await profileDB.updateProfile(body, req.user.id);
 
     if (!id) {
       throw new Error("Error updating profile.");
