@@ -5,6 +5,7 @@ const validator = require("./validators");
 const cloudinary = require("cloudinary").v2;
 
 const multer = require("multer");
+const InvalidArgumentError = require("../errors/InvalidArgumentError");
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
@@ -22,7 +23,15 @@ const validateProfileFields = [
   validator
     .validateBodyStringLength("name", 0, 50)
     .optional({ values: "falsy" }),
-  body("birthdate").isDate().optional({ values: "falsy" }),
+  body("birthdate")
+    .isDate()
+    .custom((birthdate) => {
+      if (new Date() < new Date(birthdate)) {
+        throw new InvalidArgumentError("'birthdate' must be a past date.");
+      }
+      return true;
+    })
+    .optional({ values: "falsy" }),
   validator
     .validateBodyStringLength("bio", 0, 200)
     .optional({ values: "falsy" }),
@@ -51,11 +60,11 @@ const createProfile = [
 ];
 
 const updateProfile = [
+  upload,
   validator.isAuthenticated(),
   validator.userHasProfile(),
   validateProfileFields,
   validator.checkValidations(),
-  upload,
   async function (req, res) {
     const body = { ...req.body };
 
