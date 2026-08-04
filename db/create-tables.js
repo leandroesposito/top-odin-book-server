@@ -51,7 +51,8 @@ CREATE TABLE IF NOT EXISTS posts (
 CREATE TABLE IF NOT EXISTS posts_pictures (
   id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY ( INCREMENT 7 START 1000000 ),
   post_id integer REFERENCES posts(id) ON DELETE CASCADE,
-  url TEXT
+  url TEXT,
+  public_id Text
 );
 
 CREATE TABLE IF NOT EXISTS likes (
@@ -79,7 +80,8 @@ CREATE TABLE IF NOT EXISTS messages (
 CREATE TABLE IF NOT EXISTS messages_pictures (
   id integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY ( INCREMENT 7 START 1000000 ),
   url TEXT,
-  message_id integer REFERENCES messages(id) ON DELETE CASCADE
+  message_id integer REFERENCES messages(id) ON DELETE CASCADE,
+  public_id Text
 );
 
 CREATE TABLE IF NOT EXISTS messages_last_read (
