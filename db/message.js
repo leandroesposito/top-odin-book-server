@@ -87,12 +87,12 @@ async function updateChatLastSeen(userId1, userId2, lastSeen) {
 
 async function deleteMessage(id) {
   const query = `
-    DELETE from messages WHERE id = $1
+    DELETE from messages WHERE id = $1 RETURNING id
   `;
   const params = [id];
 
-  await runQuery(query, params);
-  return true;
+  const res = await runQuery(query, params);
+  return res[0];
 }
 
 async function getMessageSenderId(id) {
