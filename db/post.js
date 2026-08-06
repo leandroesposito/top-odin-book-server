@@ -92,6 +92,8 @@ async function getFeedPosts(currentUserId, limit, offset) {
       SELECT user_id1 FROM friends WHERE user_id2 = $1
       UNION
       SELECT user_id2 FROM friends WHERE user_id1 = $1
+      UNION
+      SELECT $1
     )
     ORDER BY posts.created_at DESC
     LIMIT $2
