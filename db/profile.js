@@ -2,13 +2,15 @@ const { runQuery } = require("./runQuery");
 
 async function getProfileByUserId(id) {
   const query = `
-    SELECT p.*, COUNT(f.user_id1) as friends_count
+    SELECT p.*, COALESCE(p.name, u.username) as name,COUNT(f.user_id1) as friends_count
     FROM profiles p
+    JOIN users u
+      on u.id = p.user_id
     LEFT JOIN friends f
       ON (f.user_id1 =  p.user_id
         OR (f.user_id2 =  p.user_id))
     WHERE p.user_id = $1
-    GROUP BY p.id
+    GROUP BY p.id, u.id
   `;
   const params = [id];
 
