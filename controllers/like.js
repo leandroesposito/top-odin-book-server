@@ -10,7 +10,7 @@ const addLike = [
     const result = await likeDB.addLike(req.user.id, req.locals.post.id);
 
     if (result) {
-      res.json({ success: true });
+      res.json({ success: true, liked: true });
     } else {
       throw new Error("Error liking the post.");
     }
@@ -26,7 +26,7 @@ const removeLike = [
     const result = await likeDB.removeLike(req.user.id, req.locals.post.id);
 
     if (result) {
-      res.json({ success: true });
+      res.json({ success: true, liked: false });
     } else {
       throw new Error("Error removing like from the post.");
     }
