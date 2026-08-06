@@ -14,7 +14,7 @@ const createComment = [
     );
 
     if (result) {
-      res.json({ success: true, mesage: "Comment create successfully." });
+      res.json({ success: true, message: "Comment create successfully." });
     } else {
       throw new Error("Error creating the comment.");
     }
