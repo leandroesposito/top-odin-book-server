@@ -12,7 +12,14 @@ async function getCommentById(id) {
 
 async function getPostComments(postId) {
   const query = `
-    SELECT * FROM comments WHERE post_id = $1 ORDER BY created_at DESC;
+    SELECT c.*, p.profile_picture_url, COALESCE(p.name, u.username) as author
+    FROM comments c
+    JOIN users u
+      ON c.user_id = u.id
+    LEFT JOIN profiles p
+      ON u.id = p.user_id
+    WHERE post_id = $1
+    ORDER BY created_at DESC;
   `;
 
   const params = [postId];
