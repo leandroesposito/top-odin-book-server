@@ -26,10 +26,10 @@ INSERT INTO users (username, password) VALUES
 -- PROFILES
 -- ============================================
 INSERT INTO profiles (name, bio, birthdate, profession, profile_picture_url, user_id) VALUES
-  ('Alice Wonder', 'Love exploring new places and reading fantasy novels', '1995-03-12', 'UX Designer', 'https://i.pravatar.cc/150?u=alice', 1000000),
-  ('Bob Builder', 'Can we fix it? Yes we can!', '1992-07-25', 'Software Engineer', 'https://i.pravatar.cc/150?u=bob', 1000007),
-  ('Carol Reads', 'Book lover and coffee enthusiast', '1998-11-03', 'Librarian', 'https://i.pravatar.cc/150?u=carol', 1000014),
-  ('Dave Codes', 'Full-stack dev. Open source contributor.', '1994-01-18', 'Developer', 'https://i.pravatar.cc/150?u=dave', 1000021);
+  ('Alice Wonder', 'Love exploring new places and reading fantasy novels', '1995-03-12', 'UX Designer', 'https://i.pravatar.cc/150?u=alice_3', 1000000),
+  ('Bob Builder', 'Can we fix it? Yes we can!', '1992-07-25', 'Software Engineer', 'https://i.pravatar.cc/150?u=bob_4', 1000007),
+  ('Carol Reads', 'Book lover and coffee enthusiast', '1998-11-03', 'Librarian', 'https://i.pravatar.cc/150?u=carol_1', 1000014),
+  ('Dave Codes', 'Full-stack dev. Open source contributor.', '1994-01-18', 'Developer', 'https://i.pravatar.cc/150?u=dave_6', 1000021);
 
 -- ============================================
 -- FRIENDS (accepted)
