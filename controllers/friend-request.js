@@ -21,7 +21,7 @@ const createFriendRequest = [
       throw new Error("Error sending friend request.");
     }
 
-    res.json({ success: true, message: "Request sent successfully." });
+    res.json({ success: true, message: "Friend request sent." });
   },
 ];
 
@@ -41,7 +41,7 @@ const getFriendsRequest = [
       }
     }
 
-    res.json({ succes: true, sent, received });
+    res.json({ success: true, sent, received });
   },
 ];
 
@@ -61,7 +61,7 @@ const acceptFriendRequest = [
 
     await friendRequestDB.deleteFriendRequest(senderId, receiverId);
 
-    res.json({ success: true });
+    res.json({ success: true, message: "Friend request accepted." });
   },
 ];
 
@@ -79,7 +79,7 @@ const rejectFriendRequest = [
       throw new Error("Error rejecting friend request.");
     }
 
-    res.json({ success: true });
+    res.json({ success: true, message: "Friend request rejected." });
   },
 ];
 

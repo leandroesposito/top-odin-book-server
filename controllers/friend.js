@@ -6,8 +6,9 @@ const getMyFriendsList = [
   validator.isAuthenticated(),
   async function (req, res) {
     const friends = await friendDB.getFriendsList(req.user.id);
+    const notFriends = await friendDB.getNotFriendsList(req.user.id);
 
-    res.json({ succes: true, friends });
+    res.json({ success: true, friends, notFriends });
   },
 ];
 
@@ -17,7 +18,7 @@ const getFriendsList = [
   async function (req, res) {
     const friends = await friendDB.getFriendsList(req.params.userId);
 
-    res.json({ succes: true, friends });
+    res.json({ success: true, friends });
   },
 ];
 
@@ -32,7 +33,7 @@ const deleteFriend = [
       req.params.userId,
     );
 
-    res.json({ succes: true });
+    res.json({ success: true, message: "Friend deleted." });
   },
 ];
 
