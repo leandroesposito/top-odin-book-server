@@ -246,6 +246,20 @@ function friendRequestReceived() {
   });
 }
 
+function friendRequestSended() {
+  return param("userId").custom(async (userId, { req }) => {
+    const request = await friendRequestDB.getFriendRequest(req.user.id, userId);
+
+    if (!request) {
+      throw {
+        error: new NotFoundError("You have not sent a request to this user."),
+      };
+    }
+
+    return true;
+  });
+}
+
 function friendRequestIsValid() {
   return param("userId").custom(async (userId, { req }) => {
     const sent = await friendRequestDB.getFriendRequest(req.user.id, userId);
@@ -339,6 +353,7 @@ module.exports = {
   commentBelongToUser,
   userExist,
   friendRequestReceived,
+  friendRequestSended,
   friendRequestIsValid,
   isFriend,
   isMessageOwner,

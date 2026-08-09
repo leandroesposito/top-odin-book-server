@@ -83,9 +83,28 @@ const rejectFriendRequest = [
   },
 ];
 
+const cancelFriendRequest = [
+  validator.isAuthenticated(),
+  validator.friendRequestSended(),
+  validator.checkValidations(),
+  async function (req, res) {
+    const senderId = req.user.id;
+    const receiverId = req.params.userId;
+
+    const result = friendRequestDB.deleteFriendRequest(senderId, receiverId);
+
+    if (!result) {
+      throw new Error("Error canceling friend request.");
+    }
+
+    res.json({ success: true, message: "Friend request canceled." });
+  },
+];
+
 module.exports = {
   createFriendRequest,
   getFriendsRequest,
   acceptFriendRequest,
   rejectFriendRequest,
+  cancelFriendRequest,
 };

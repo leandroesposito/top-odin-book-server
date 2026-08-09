@@ -5,5 +5,6 @@ router.get("/me/friends-requests", controller.getFriendsRequest);
 router.post("/:userId/send-request", controller.createFriendRequest);
 router.post("/:userId/accept-request", controller.acceptFriendRequest);
 router.delete("/:userId/reject-request", controller.rejectFriendRequest);
+router.delete("/:userId/cancel-request", controller.cancelFriendRequest);
 
 module.exports = router;
