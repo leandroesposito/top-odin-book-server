@@ -104,18 +104,22 @@ const updateProfile = [
 const getProfileByUserId = [
   validator.profileExist(),
   validator.checkValidations(),
-  function (req, res) {
+  async function (req, res) {
+    const profile = {
+      id: req.locals.profile.id,
+      name: req.locals.profile.name,
+      bio: req.locals.profile.bio,
+      birthdate: req.locals.profile.birthdate,
+      profession: req.locals.profile.profession,
+      profilePictureUrl: req.locals.profile.profile_picture_url,
+      userId: req.locals.profile.user_id,
+      friendsCount: req.locals.profile.friends_count,
+      isFriend: req.locals.profile.isFriend,
+      requestSent: req.locals.profile.requestSent,
+      requestReceived: req.locals.profile.requestReceived,
+    };
     res.json({
-      profile: {
-        id: req.locals.profile.id,
-        name: req.locals.profile.name,
-        bio: req.locals.profile.bio,
-        birthdate: req.locals.profile.birthdate,
-        profession: req.locals.profile.profession,
-        profilePictureUrl: req.locals.profile.profile_picture_url,
-        userId: req.locals.profile.user_id,
-        friendsCount: req.locals.profile.friends_count,
-      },
+      profile,
     });
   },
 ];

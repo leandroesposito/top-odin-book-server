@@ -136,7 +136,7 @@ function userHasProfile() {
 
 function profileExist() {
   return param("userId").custom(async (userId, { req }) => {
-    const profile = await profileDB.getProfileByUserId(userId);
+    const profile = await profileDB.getProfileByUserId(userId, req.user?.id);
 
     if (!profile) {
       throw { error: new NotFoundError("Profile not found.") };
