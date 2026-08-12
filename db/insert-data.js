@@ -1,12 +1,33 @@
 const bcrypt = require("bcryptjs");
 
-const passwords = ["pawonder", "pbbuilder", "pcreads", "pdcodes"];
+const passwords = [
+  "pawonder",
+  "pbbuilder",
+  "pcreads",
+  "pdcodes",
+  "pedesigns",
+  "pffitness",
+  "pggarden",
+  "phhikes",
+  "piwrites",
+  "pjphoto",
+  "pkchef",
+  "plmusic",
+];
 
 const hashedPasswords = [
   "$2b$10$d0Z7nCWx1LaFsYpADo/avuo..EeBs8M9lg8s2rPAEtq4OA5WnCzOO",
   "$2b$10$E8sWYwYLr7eEc4rYJGWFC.x1XY53KZpH4WbXoHVVc.lxOWgLXteCS",
   "$2b$10$KINmqySdjYAa1qtrEOhaH.Diya.Gj1RCejHSM.fEFk5Rks5IQdRkG",
   "$2b$10$N7EbrhzEvTHF3tGvA0CWK.xxqQuOPqubundUAievCUohuzR4ag1Ku",
+  "$2b$10$au3RPMv6v6j2XglEnetmsurbtQmgtmFiTOkAYbd7gRNJfzP.OFTde",
+  "$2b$10$LuQek9czYDhiJ8Spo6siWuKjRnJDNBnmzCqlDQlY0EvlQOsPSTbeO",
+  "$2b$10$JKr4znzV677sFy8f1nzeKuJo3OTlUUNiAXc0.Plcspilsq80k1NUK",
+  "$2b$10$mDEmpUSm.to881X5D2bxveNq71tjsDg3Og1Uh5uGGDRNX/a8Q0lPi",
+  "$2b$10$4g1KOVeuA13hRiL2slepD.9Fp3aEkJGATmACaFOBMWvDbs5vxLM0u",
+  "$2b$10$zifAEJeAWqXIDRDZQ0YT..48EGTQmBPkclJzyDrcOZo0MuFR6h3EK",
+  "$2b$10$Ygp7PA6BnYJ83nXX2fKhbeMs8m49WrzPrKIFCI7ygmQt1UBIpKq.K",
+  "$2b$10$4RJETXY7g1pzwLOWoJny8OClGqLwCru1OBwqGK/eRBtTiyYhXGsSK",
 ];
 
 const query = `
@@ -17,7 +38,15 @@ INSERT INTO users (username, password) VALUES
   ('alice_wonder', '$2b$10$d0Z7nCWx1LaFsYpADo/avuo..EeBs8M9lg8s2rPAEtq4OA5WnCzOO'),
   ('bob_builder', '$2b$10$E8sWYwYLr7eEc4rYJGWFC.x1XY53KZpH4WbXoHVVc.lxOWgLXteCS'),
   ('carol_reads', '$2b$10$KINmqySdjYAa1qtrEOhaH.Diya.Gj1RCejHSM.fEFk5Rks5IQdRkG'),
-  ('dave_codes', '$2b$10$N7EbrhzEvTHF3tGvA0CWK.xxqQuOPqubundUAievCUohuzR4ag1Ku');
+  ('dave_codes', '$2b$10$N7EbrhzEvTHF3tGvA0CWK.xxqQuOPqubundUAievCUohuzR4ag1Ku'),
+  ('emma_designs', '$2b$10$hashed'),
+  ('frank_fitness', '$2b$10$hashed'),
+  ('grace_garden', '$2b$10$hashed'),
+  ('henry_hikes', '$2b$10$hashed'),
+  ('iris_writes', '$2b$10$hashed'),
+  ('jack_photo', '$2b$10$hashed'),
+  ('kate_chef', '$2b$10$hashed'),
+  ('leo_music', '$2b$10$hashed');
 
 -- Let's reference them by the IDs they get:
 -- Alice = 1000000, Bob = 1000007, Carol = 1000014, Dave = 1000021
@@ -29,23 +58,56 @@ INSERT INTO profiles (name, bio, birthdate, profession, profile_picture_url, use
   ('Alice Wonder', 'Love exploring new places and reading fantasy novels', '1995-03-12', 'UX Designer', 'https://i.pravatar.cc/150?u=alice_3', 1000000),
   ('Bob Builder', 'Can we fix it? Yes we can!', '1992-07-25', 'Software Engineer', 'https://i.pravatar.cc/150?u=bob_4', 1000007),
   ('Carol Reads', 'Book lover and coffee enthusiast', '1998-11-03', 'Librarian', 'https://i.pravatar.cc/150?u=carol_1', 1000014),
-  ('Dave Codes', 'Full-stack dev. Open source contributor.', '1994-01-18', 'Developer', 'https://i.pravatar.cc/150?u=dave_6', 1000021);
+  ('Dave Codes', 'Full-stack dev. Open source contributor.', '1994-01-18', 'Developer', 'https://i.pravatar.cc/150?u=dave_6', 1000021),
+  ('Emma Designs', 'UI/UX designer. Pixel perfectionist.', '1996-06-15', 'Designer', 'https://i.pravatar.cc/150?u=emma_3', 1000028),
+  ('Frank Fitness', 'Personal trainer and nutrition coach', '1991-09-20', 'Trainer', 'https://i.pravatar.cc/150?u=frank_6', 1000035),
+  ('Grace Garden', 'Plant mom 🌿 Urban gardener', '1994-04-08', 'Botanist', 'https://i.pravatar.cc/150?u=grace_2', 1000042),
+  ('Henry Hikes', 'Trail explorer. 47 peaks and counting.', '1989-12-01', 'Outdoor Guide', 'https://i.pravatar.cc/150?u=henry', 1000049),
+  ('Iris Writes', 'Aspiring novelist. Coffee powered.', '1997-02-14', 'Writer', 'https://i.pravatar.cc/150?u=iris_2', 1000056),
+  ('Jack Photo', 'Street photographer. Capturing moments.', '1993-08-30', 'Photographer', 'https://i.pravatar.cc/150?u=jack_2', 1000063),
+  ('Kate Chef', 'Home cook. Sharing recipes that work.', '1995-11-22', 'Chef', 'https://i.pravatar.cc/150?u=kate', 1000070),
+  ('Leo Music', 'Guitarist. Vinyl collector. Live music lover.', '1990-05-17', 'Musician', 'https://i.pravatar.cc/150?u=leo', 1000077);
 
 -- ============================================
 -- FRIENDS (accepted)
 -- ============================================
 -- Alice <-> Bob, Alice <-> Carol, Bob <-> Dave
 INSERT INTO friends (user_id1, user_id2) VALUES
-  (1000000, 1000007),
-  (1000000, 1000014),
-  (1000007, 1000021);
+  -- Alice
+  (1000000, 1000007), (1000000, 1000014), (1000000, 1000028),
+  (1000000, 1000035), (1000000, 1000049), (1000000, 1000056),
+  -- Bob
+  (1000007, 1000021), (1000007, 1000035), (1000007, 1000063), (1000007, 1000077),
+  -- Carol
+  (1000014, 1000042), (1000014, 1000056), (1000014, 1000070),
+  -- Dave
+  (1000021, 1000028), (1000021, 1000063), (1000021, 1000077),
+  -- Emma
+  (1000028, 1000042), (1000028, 1000049), (1000028, 1000070),
+  -- Frank
+  (1000035, 1000049), (1000035, 1000077),
+  -- Grace
+  (1000042, 1000056), (1000042, 1000070),
+  -- Henry
+  (1000049, 1000063),
+  -- Iris
+  (1000056, 1000077),
+  -- Jack
+  (1000063, 1000070);
 
 -- ============================================
 -- FRIEND REQUESTS (pending)
 -- ============================================
 -- Carol sent request to Dave (pending)
 INSERT INTO friends_requests (sender_id, receiver_id) VALUES
-  (1000014, 1000021);
+  (1000021, 1000014),  -- Dave → Carol
+  (1000049, 1000014),  -- Henry → Carol
+  (1000056, 1000021),  -- Iris → Dave
+  (1000063, 1000028),  -- Jack → Emma
+  (1000070, 1000035),  -- Kate → Frank
+  (1000077, 1000028),  -- Leo → Emma
+  (1000007, 1000042),  -- Bob → Grace
+  (1000035, 1000070);  -- Frank → Kate
 
 -- ============================================
 -- POSTS
