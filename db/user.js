@@ -24,7 +24,16 @@ async function getUserByUsername(username) {
 }
 
 async function getUserById(id) {
-  const query = "SELECT id, username FROM users WHERE id = $1";
+  const query = `
+    SELECT
+      u.id,
+      username,
+      COALESCE(p.name, u.username) as name
+    FROM users u
+    LEFT JOIN profiles p
+      ON p.user_id = u.id
+    WHERE u.id = $1
+  `;
   const params = [id];
 
   const rows = await runQuery(query, params);
