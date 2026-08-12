@@ -223,12 +223,14 @@ function commentBelongToUser() {
 }
 
 function userExist() {
-  return param("userId").custom(async (userId) => {
+  return param("userId").custom(async (userId, { req }) => {
     const user = await userDB.getUserById(userId);
 
     if (!user) {
       throw { error: new NotFoundError("User not found.") };
     }
+
+    req.locals = { user };
 
     return true;
   });
