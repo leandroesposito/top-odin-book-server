@@ -5,7 +5,7 @@ async function getProfileByUserId(profileUserId, currentUserId) {
     SELECT
       p.*,
       COALESCE(p.name, u.username) as name,
-      COUNT(DISTINCT(f.user_id1)) as friends_count,
+      COUNT(f.user_id1) as friends_count,
       CASE WHEN $2 IS NULL THEN NULL
         WHEN MAX(f_me.user_id1) IS NOT NULL THEN true ELSE false END AS "isFriend",
       CASE WHEN $2 IS NULL THEN NULL
