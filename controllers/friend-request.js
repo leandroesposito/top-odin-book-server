@@ -35,9 +35,17 @@ const getFriendsRequest = [
 
     for (const r of requests) {
       if (r.sender_id === req.user.id) {
-        sent.push(r.receiver_id);
+        sent.push({
+          id: r.id,
+          name: r.name,
+          profile_picture_url: r.profile_picture_url,
+        });
       } else {
-        received.push(r.sender_id);
+        received.push({
+          id: r.id,
+          name: r.name,
+          profile_picture_url: r.profile_picture_url,
+        });
       }
     }
 

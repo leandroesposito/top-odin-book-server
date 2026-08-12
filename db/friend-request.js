@@ -28,7 +28,19 @@ async function getFriendRequest(sender_id, receiver_id) {
 
 async function getAllFriendsRequests(userId) {
   const query = `
-    SELECT * FROM friends_requests WHERE receiver_id = $1 OR sender_id = $1;
+    SELECT
+      u.id,
+      COALESCE(p.name, u.username) as name,
+      p.profile_picture_url,
+      fr.*
+      FROM friends_requests fr
+    JOIN users u
+      ON u.id = fr.sender_id OR  u.id = fr.receiver_id
+    LEFT JOIN profiles p
+      ON u.id = p.user_id
+    WHERE (receiver_id = $1
+      OR sender_id = $1) AND
+      u.id != $1;
   `;
   const params = [userId];
 
