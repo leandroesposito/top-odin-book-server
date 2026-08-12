@@ -58,7 +58,7 @@ async function getChats(userId) {
         ), 0) as unread_count
     FROM users u
     LEFT JOIN profiles p ON u.id = p.user_id
-    LEFT JOIN friends f ON (u.id = f.user_id1 AND f.user_id2 = $1) OR
+    JOIN friends f ON (u.id = f.user_id1 AND f.user_id2 = $1) OR
       (u.id = f.user_id2 AND f.user_id1 = $1)
     LEFT JOIN messages m ON
         (m.sender_id = u.id AND m.receiver_id = $1) OR
