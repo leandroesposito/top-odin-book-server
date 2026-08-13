@@ -18,7 +18,30 @@ const upload = multer({
 cloudinary.config();
 
 const validatePostBody = () =>
-  validator.validateBodyStringLength("body", 1, 500);
+  function (req, res, next) {
+    const { body } = req.body;
+    const files = req.files;
+
+    if (
+      (typeof body === "undefined" || body.trim() === "") &&
+      files.length === 0
+    ) {
+      throw new InvalidArgumentError(
+        "'body' and 'pictures' can't be empty at the same time.",
+      );
+    }
+
+    if (typeof body !== "undefined") {
+      if (body.trim().length > 500) {
+        throw new InvalidArgumentError(
+          `'body' must be between 0 and 500 characters inclusive.`,
+        );
+      }
+      req.body.body = body.trim();
+    }
+
+    next();
+  };
 
 const uploadPicture = async (buffer) => {
   return new Promise((resolve, reject) => {
@@ -64,7 +87,6 @@ const createPost = [
   upload,
   validator.isAuthenticated(),
   validatePostBody(),
-  validator.checkValidations(),
   async function (req, res) {
     const { body } = req.body;
     const postId = (await postDB.createPost(body, req.user.id)).id;
@@ -142,8 +164,8 @@ const updatePost = [
   upload,
   validator.isAuthenticated(),
   validator.postBelongToUser(),
-  validatePostBody(),
   validator.checkValidations(),
+  validatePostBody(),
   async function (req, res) {
     const { body } = req.body;
     const files = req.files;
