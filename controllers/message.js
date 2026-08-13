@@ -72,7 +72,7 @@ const sendMessage = [
       files.length === 0
     ) {
       throw new InvalidArgumentError(
-        "'body' and 'message-pictures' can't be empty at the same time.",
+        "'body' and 'pictures' can't be empty at the same time.",
       );
     }
 
