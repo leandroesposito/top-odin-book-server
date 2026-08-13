@@ -89,7 +89,11 @@ CREATE TABLE IF NOT EXISTS messages_last_read (
   user_id2 integer REFERENCES users(id) ON DELETE CASCADE,
   last_seen TIMESTAMP DEFAULT '2000-01-01',
   PRIMARY KEY ( user_id1, user_id2 )
-)
+);
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX trgm_idx_users_username ON users USING GIST (username gist_trgm_ops);
+CREATE INDEX trgm_idx_profiles_name ON profiles USING GIST (name gist_trgm_ops);
 `;
 
 async function createTables(client) {
