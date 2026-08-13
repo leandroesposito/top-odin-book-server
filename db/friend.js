@@ -72,7 +72,7 @@ async function getFriendsList(userId, currentUserId) {
   return res;
 }
 
-async function getNotFriendsList(userId) {
+async function getSuggestedUsers(userId) {
   const query = `
     SELECT
       u.id,
@@ -101,7 +101,7 @@ async function getNotFriendsList(userId) {
   return res;
 }
 
-async function getNotFriendsRandomList(userId, count = 50) {
+async function getNRandomSuggestedUsers(userId, count = 50) {
   const query = `
     SELECT
       u.id,
@@ -152,7 +152,7 @@ module.exports = {
   addFriendsPair,
   getFriendsPair,
   getFriendsList,
-  getNotFriendsList,
-  getNotFriendsRandomList,
+  getSuggestedUsers,
+  getNRandomSuggestedUsers,
   deleteFriendsPair,
 };

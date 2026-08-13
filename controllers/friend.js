@@ -6,9 +6,12 @@ const getMyFriendsList = [
   validator.isAuthenticated(),
   async function (req, res) {
     const friends = await friendDB.getFriendsList(req.user.id, req.user.id);
-    const notFriends = await friendDB.getNotFriendsRandomList(req.user.id, 5);
+    const suggestedUsers = await friendDB.getNRandomSuggestedUsers(
+      req.user.id,
+      5,
+    );
 
-    res.json({ success: true, friends, notFriends, user: req.user });
+    res.json({ success: true, friends, suggestedUsers, user: req.user });
   },
 ];
 
@@ -40,8 +43,18 @@ const deleteFriend = [
   },
 ];
 
+const getFriendsSuggestions = [
+  validator.isAuthenticated(),
+  async function (req, res) {
+    const suggestedUsers = await friendDB.getSuggestedUsers(req.user.id);
+
+    res.json({ success: true, suggestedUsers });
+  },
+];
+
 module.exports = {
   getMyFriendsList,
   getFriendsList,
+  getFriendsSuggestions,
   deleteFriend,
 };
