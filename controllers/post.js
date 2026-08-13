@@ -75,7 +75,11 @@ const createPost = [
       throw new Error("Error creating post.");
     }
 
-    res.json({ success: true, message: "Post create successfully." });
+    res.json({
+      success: true,
+      message: "Post create successfully.",
+      post: { id: postId },
+    });
   },
 ];
 
