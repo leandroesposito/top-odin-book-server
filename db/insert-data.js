@@ -104,6 +104,7 @@ INSERT INTO friends (user_id1, user_id2) VALUES
 -- ============================================
 -- Carol sent request to Dave (pending)
 INSERT INTO friends_requests (sender_id, receiver_id) VALUES
+  (1000021, 1000000),  -- Dave → Alice
   (1000021, 1000014),  -- Dave → Carol
   (1000049, 1000014),  -- Henry → Carol
   (1000056, 1000021),  -- Iris → Dave
@@ -132,8 +133,12 @@ INSERT INTO posts (body, user_id, created_at) VALUES
 -- POSTS PICTURES
 -- ============================================
 INSERT INTO posts_pictures (post_id, url) VALUES
-  (1000000, 'https://picsum.photos/seed/post1/600/400'),
-  (1000007, 'https://picsum.photos/seed/post2/600/400'),
+  (1000000, 'https://picsum.photos/id/20/600/400'),
+  (1000007, 'https://picsum.photos/id/3/400/300'),
+  (1000007, 'https://picsum.photos/id/5/300/600'),
+  (1000007, 'https://picsum.photos/id/4/400/200'),
+  (1000028, 'https://picsum.photos/id/180/400/400'),
+  (1000028, 'https://picsum.photos/id/192/600/400'),
   (1000042, 'https://picsum.photos/seed/post7/600/400');
 
 -- ============================================
