@@ -13,6 +13,7 @@ const passwords = [
   "pjphoto",
   "pkchef",
   "plmusic",
+  "pguser",
 ];
 
 const hashedPasswords = [
@@ -28,6 +29,7 @@ const hashedPasswords = [
   "$2b$10$zifAEJeAWqXIDRDZQ0YT..48EGTQmBPkclJzyDrcOZo0MuFR6h3EK",
   "$2b$10$Ygp7PA6BnYJ83nXX2fKhbeMs8m49WrzPrKIFCI7ygmQt1UBIpKq.K",
   "$2b$10$4RJETXY7g1pzwLOWoJny8OClGqLwCru1OBwqGK/eRBtTiyYhXGsSK",
+  "$2b$10$yQRc0h2FgMb53/dbl9u0iupBJOeb2QrsIpoZg5rBYwFENud0O1oEi",
 ];
 
 const query = `
@@ -39,14 +41,15 @@ INSERT INTO users (username, password) VALUES
   ('bob_builder', '$2b$10$E8sWYwYLr7eEc4rYJGWFC.x1XY53KZpH4WbXoHVVc.lxOWgLXteCS'),
   ('carol_reads', '$2b$10$KINmqySdjYAa1qtrEOhaH.Diya.Gj1RCejHSM.fEFk5Rks5IQdRkG'),
   ('dave_codes', '$2b$10$N7EbrhzEvTHF3tGvA0CWK.xxqQuOPqubundUAievCUohuzR4ag1Ku'),
-  ('emma_designs', '$2b$10$hashed'),
-  ('frank_fitness', '$2b$10$hashed'),
-  ('grace_garden', '$2b$10$hashed'),
-  ('henry_hikes', '$2b$10$hashed'),
-  ('iris_writes', '$2b$10$hashed'),
-  ('jack_photo', '$2b$10$hashed'),
-  ('kate_chef', '$2b$10$hashed'),
-  ('leo_music', '$2b$10$hashed');
+  ('emma_designs', '$2b$10$au3RPMv6v6j2XglEnetmsurbtQmgtmFiTOkAYbd7gRNJfzP.OFTde'),
+  ('frank_fitness', '$2b$10$LuQek9czYDhiJ8Spo6siWuKjRnJDNBnmzCqlDQlY0EvlQOsPSTbeO'),
+  ('grace_garden', '$2b$10$JKr4znzV677sFy8f1nzeKuJo3OTlUUNiAXc0.Plcspilsq80k1NUK'),
+  ('henry_hikes', '$2b$10$mDEmpUSm.to881X5D2bxveNq71tjsDg3Og1Uh5uGGDRNX/a8Q0lPi'),
+  ('iris_writes', '$2b$10$4g1KOVeuA13hRiL2slepD.9Fp3aEkJGATmACaFOBMWvDbs5vxLM0u'),
+  ('jack_photo', '$2b$10$zifAEJeAWqXIDRDZQ0YT..48EGTQmBPkclJzyDrcOZo0MuFR6h3EK'),
+  ('kate_chef', '$2b$10$Ygp7PA6BnYJ83nXX2fKhbeMs8m49WrzPrKIFCI7ygmQt1UBIpKq.K'),
+  ('leo_music', '$2b$10$4RJETXY7g1pzwLOWoJny8OClGqLwCru1OBwqGK/eRBtTiyYhXGsSK'),
+  ('guest_user', '$2b$10$yQRc0h2FgMb53/dbl9u0iupBJOeb2QrsIpoZg5rBYwFENud0O1oEi');
 
 -- Let's reference them by the IDs they get:
 -- Alice = 1000000, Bob = 1000007, Carol = 1000014, Dave = 1000021
@@ -66,7 +69,8 @@ INSERT INTO profiles (name, bio, birthdate, profession, profile_picture_url, use
   ('Iris Writes', 'Aspiring novelist. Coffee powered.', '1997-02-14', 'Writer', 'https://i.pravatar.cc/150?u=iris_2', 1000056),
   ('Jack Photo', 'Street photographer. Capturing moments.', '1993-08-30', 'Photographer', 'https://i.pravatar.cc/150?u=jack_2', 1000063),
   ('Kate Chef', 'Home cook. Sharing recipes that work.', '1995-11-22', 'Chef', 'https://i.pravatar.cc/150?u=kate', 1000070),
-  ('Leo Music', 'Guitarist. Vinyl collector. Live music lover.', '1990-05-17', 'Musician', 'https://i.pravatar.cc/150?u=leo', 1000077);
+  ('Leo Music', 'Guitarist. Vinyl collector. Live music lover.', '1990-05-17', 'Musician', 'https://i.pravatar.cc/150?u=leo', 1000077),
+  ('Guest User', 'Just exploring! 👋 Demo account for testing.', '2000-01-01', 'Explorer', 'https://i.pravatar.cc/150?u=guest_6', 1000084);
 
 -- ============================================
 -- FRIENDS (accepted)
