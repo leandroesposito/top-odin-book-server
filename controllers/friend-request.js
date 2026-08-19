@@ -39,12 +39,14 @@ const getFriendsRequest = [
           id: r.id,
           name: r.name,
           profile_picture_url: r.profile_picture_url,
+          requestSent: true,
         });
       } else {
         received.push({
           id: r.id,
           name: r.name,
           profile_picture_url: r.profile_picture_url,
+          requestReceived: true,
         });
       }
     }
