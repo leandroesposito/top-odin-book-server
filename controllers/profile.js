@@ -111,7 +111,7 @@ const getProfileByUserId = [
       bio: req.locals.profile.bio,
       birthdate: req.locals.profile.birthdate,
       profession: req.locals.profile.profession,
-      profilePictureUrl: req.locals.profile.profile_picture_url,
+      profile_picture_url: req.locals.profile.profile_picture_url,
       userId: req.locals.profile.user_id,
       friendsCount: req.locals.profile.friends_count,
       isFriend: req.locals.profile.isFriend,
