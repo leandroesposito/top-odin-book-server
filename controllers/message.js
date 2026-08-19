@@ -176,6 +176,7 @@ const getChats = [
         lastActive: c.last_active,
         lastMessageTime: c.last_message_time,
         unreadCount: c.unread_count,
+        profile_picture_url: c.profile_picture_url,
       })),
     });
   },

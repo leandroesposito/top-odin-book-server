@@ -45,6 +45,7 @@ async function getChats(userId) {
     SELECT
         u.id,
         COALESCE(p.name, u.username) as name,
+        p.profile_picture_url,
         u.last_active,
         MAX(m.created_at) AT TIME ZONE 'UTC' as last_message_time,
         COALESCE((
@@ -64,7 +65,7 @@ async function getChats(userId) {
         (m.sender_id = u.id AND m.receiver_id = $1) OR
         (m.receiver_id = u.id AND m.sender_id = $1)
     WHERE (f.user_id1 IS NOT NULL OR m.id IS NOT NULL) AND u.id != $1
-    GROUP BY u.id, COALESCE(p.name, u.username), u.last_active
+    GROUP BY u.id, COALESCE(p.name, u.username), p.profile_picture_url, u.last_active
     ORDER BY MAX(m.created_at) DESC NULLS LAST, unread_count DESC NULLS LAST;
   `;
   const params = [userId];
