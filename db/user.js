@@ -12,7 +12,12 @@ async function createUser(username, password) {
 
 async function getUserByUsername(username) {
   const query = `
-    SELECT u.id, u.username, u.password, COALESCE(p.name, u.username) as name
+    SELECT
+      u.id,
+      u.username,
+      u.password,
+      COALESCE(p.name, u.username) as name,
+      p.profile_picture_url
     FROM users u
     LEFT JOIN profiles p
       ON u.id = p.user_id
