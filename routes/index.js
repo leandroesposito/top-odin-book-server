@@ -5,6 +5,7 @@ const postRouter = require("./post");
 const userRouter = require("./user");
 const friendRouter = require("./friend");
 const messageRouter = require("./message");
+const notificationRouter = require("./notification");
 const indexController = require("../controllers/index");
 
 const indexRouter = Router();
@@ -15,6 +16,7 @@ indexRouter.use("/posts", postRouter);
 indexRouter.use("/users", userRouter);
 indexRouter.use("/friends", friendRouter);
 indexRouter.use("/messages", messageRouter);
+indexRouter.use("/notifications", notificationRouter);
 indexRouter.get("/", indexController.index);
 
 module.exports = indexRouter;
