@@ -18,6 +18,8 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(
   cors({
     credentials: true,
@@ -33,7 +35,11 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 },
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+      sameSite: "none",
+      secure: true,
+    },
     store: new pgSession({ pool, createTableIfMissing: true }),
   }),
 );
