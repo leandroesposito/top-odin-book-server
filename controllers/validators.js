@@ -62,7 +62,7 @@ function validateBodyStringLength(field, min, max) {
 function validateUsername() {
   return validateBodyStringLength("username", 4, 20)
     .custom((username) => {
-      const pattern = /(?=.*[^a-z0-9_.])/;
+      const pattern = /(?=.*[^a-z0-9_.ñ])/;
       if (pattern.test(username)) {
         throw new InvalidArgumentError(
           "'username' can only have lowercase letters, numbers, dots (.) and underscores (_)",
