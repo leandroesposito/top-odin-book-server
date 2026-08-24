@@ -91,6 +91,10 @@ const updateProfile = [
       body.profilePictureUrl = uploadResult.url;
     }
 
+    if (!body.birthdate) {
+      body.birthdate = null;
+    }
+
     const id = await profileDB.updateProfile(body, req.user.id);
 
     if (!id) {
