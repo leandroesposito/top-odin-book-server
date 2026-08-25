@@ -46,6 +46,16 @@ async function getUserById(id) {
   return rows[0];
 }
 
+async function deleteUserById(userId) {
+  const query = `
+    DELETE FROM users WHERE id = $1 RETURNING id;
+  `;
+  const params = [userId];
+
+  const res = await runQuery(query, params);
+  return res[0].id;
+}
+
 async function searchUsers(search, currentUserId) {
   const query = `
     SELECT
@@ -271,6 +281,7 @@ module.exports = {
   getUserByUsername,
   getUserById,
   createUser,
+  deleteUserById,
   searchUsers,
   resetGuestUser,
   createGuestData,
