@@ -3,6 +3,7 @@ const postDB = require("../db/post");
 const pictureDB = require("../db/picture");
 const validator = require("./validators");
 const cloudinary = require("cloudinary").v2;
+const InvalidArgumentError = require("../errors/InvalidArgumentError");
 
 const multer = require("multer");
 const upload = multer({
@@ -18,18 +19,8 @@ const upload = multer({
 cloudinary.config();
 
 const validatePostBody = () =>
-  function (req, res, next) {
-    const { body } = req.body;
-    const files = req.files;
-
-    if (
-      (typeof body === "undefined" || body.trim() === "") &&
-      files.length === 0
-    ) {
-      throw new InvalidArgumentError(
-        "'body' and 'pictures' can't be empty at the same time.",
-      );
-    }
+  async function (req, res, next) {
+    let { body } = req.body;
 
     if (typeof body !== "undefined") {
       if (body.trim().length > 500) {
@@ -37,7 +28,38 @@ const validatePostBody = () =>
           `'body' must be between 0 and 500 characters inclusive.`,
         );
       }
-      req.body.body = body.trim();
+      body = body.trim();
+      req.body.body = body;
+    }
+
+    const files = req.files;
+    const postPictures = req.locals?.post
+      ? await pictureDB.getPostPictures(req.locals.post.id)
+      : [];
+
+    const dpValue = req.body["delete-pictures"];
+    const deletePictures = Array.isArray(dpValue)
+      ? dpValue
+      : dpValue
+        ? [dpValue]
+        : [];
+
+    const hasText = body;
+    const hasNewPictures = files.length > 0;
+    const hasCurrentPicturesLeft = deletePictures.length < postPictures.length;
+
+    const isEmpty = !hasText && !hasNewPictures && !hasCurrentPicturesLeft;
+
+    if (isEmpty) {
+      if (req.locals?.post) {
+        throw new InvalidArgumentError(
+          "You cant leave an empty post, use the delete post function",
+        );
+      } else {
+        throw new InvalidArgumentError(
+          "'body' and 'pictures' can't be empty at the same time.",
+        );
+      }
     }
 
     next();
