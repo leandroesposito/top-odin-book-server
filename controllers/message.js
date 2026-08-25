@@ -99,7 +99,13 @@ const sendMessage = [
       new Date(),
     );
 
-    await uploadPictures(messageId, req.files);
+    try {
+      await uploadPictures(messageId, req.files);
+    } catch (error) {
+      await messageDB.deleteMessage(messageId);
+      throw error;
+    }
+
     await messageDB.updateChatLastSeen(senderId, receiverId, new Date());
 
     if (messageId) {

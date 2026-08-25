@@ -91,7 +91,12 @@ const createPost = [
     const { body } = req.body;
     const postId = (await postDB.createPost(body, req.user.id)).id;
 
-    await uploadPictures(postId, req.files);
+    try {
+      await uploadPictures(postId, req.files);
+    } catch (error) {
+      await postDB.deletePost(postId);
+      throw error;
+    }
 
     if (!postId) {
       throw new Error("Error creating post.");
